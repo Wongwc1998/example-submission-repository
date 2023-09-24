@@ -3,7 +3,7 @@ import axios from 'axios'
 import personService from './services/persons'
 
 const DeleteButton = ({ id }) => {
-  return (<button onClick={() => console.log(id)}>delete</button>);
+  return (<button onClick={() => personService.deletePerson(id)}>delete</button>);
 }
 
 const NumbersDisplay = ({ numbers }) => {
