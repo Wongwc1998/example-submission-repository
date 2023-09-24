@@ -60,7 +60,15 @@ const App = () => {
   const addName = (event) => {
     event.preventDefault();
     if (persons.some((element) => element.name === newName)) {
-      alert(`${newName} is already added to phonebook`);
+      if (confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+
+        const newPerson = {
+          name: newName, number: newNumber
+        }
+        const personID = persons.find(person => person.name === newName).id
+        personService.update(personID, newPerson);
+        setPersons(persons.map(person => person.id !== personID ? person : newPerson));
+      }
     }
     else {
       const newPerson = {
