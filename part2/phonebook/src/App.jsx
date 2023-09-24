@@ -4,8 +4,11 @@ import personService from './services/persons'
 
 const DeleteButton = ({ id, deleteEffect }) => {
   return (<button onClick={() => {
-    personService.deletePerson(id);
-    deleteEffect(id);
+    console.log(person);
+    if (confirm(`delete ${person.name}?`)) {
+      personService.deletePerson(person.id);
+      deleteEffect(person.id);
+    }
   }}>delete</button>);
 }
 
