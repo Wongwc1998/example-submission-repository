@@ -2,6 +2,18 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 
+const Notification = ({ message }) => {
+  if (message === null) {
+    return null
+  }
+
+  return (
+    <div className='notify'>
+      {message}
+    </div>
+  )
+}
+
 const DeleteButton = ({ person, deleteEffect }) => {
   return (<button onClick={() => {
     console.log(person);
@@ -57,6 +69,7 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
+  const [message, setMessage] = useState('')
   const addName = (event) => {
     event.preventDefault();
     if (persons.some((element) => element.name === newName)) {
@@ -78,6 +91,12 @@ const App = () => {
         .then(response => {
           console.log(response);
           setPersons(persons.concat(response.data))
+          setMessage(
+            `Added ${response.data.name}`
+          );
+          setTimeout(() => {
+            setMessage(null)
+          }, 5000);
         })
     }
   }
@@ -88,6 +107,8 @@ const App = () => {
 
   return (
     <div>
+      <h1>Notes</h1>
+      {message === '' ? <div></div> : <Notification message={message} />}
       <h2>Phonebook</h2>
       <Filter filter={filter} setFilter={setFilter} />
       <h2>Add a new</h2>
