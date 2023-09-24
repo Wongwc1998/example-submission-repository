@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import countriesService from './services/countries'
 
 const CountriesDisplay = ({ filter, countries, shownArray, setShownArray }) => {

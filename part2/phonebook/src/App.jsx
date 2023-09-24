@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import personService from './services/persons'
 
 const Notification = ({ message }) => {
@@ -79,7 +78,7 @@ const App = () => {
           name: newName, number: newNumber
         }
         const personID = persons.find(person => person.name === newName).id
-        personService.update(personID, newPerson).catch(error => {
+        personService.update(personID, newPerson).catch(() => {
           setMessage(`Information of ${newPerson.name} has already been removed from server`);
         })
         setPersons(persons.map(person => person.id !== personID ? person : newPerson));

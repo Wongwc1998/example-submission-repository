@@ -6,13 +6,13 @@ const Part = ({ part }) => <p>
 const Content = ({ parts }) => <>
     {parts.map(part => <Part part={part} key={part.id} />)}
 </>;
-function reducer(accumulator, currentValue, index) {
-    const returns = accumulator + currentValue.exercises;
-    console.log(
-        `accumulator: ${accumulator}, currentValue: ${currentValue.exercises}, index: ${index}, returns: ${returns}`
-    );
-    return returns;
-}
+// function reducer(accumulator, currentValue, index) {
+//     const returns = accumulator + currentValue.exercises;
+//     console.log(
+//         `accumulator: ${accumulator}, currentValue: ${currentValue.exercises}, index: ${index}, returns: ${returns}`
+//     );
+//     return returns;
+// }
 export const Course = ({ courses }) => <>
     <h2>Web development curriculum</h2>
     {courses.map(course => {
