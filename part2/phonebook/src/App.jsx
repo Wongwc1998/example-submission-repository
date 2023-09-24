@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 
-const DeleteButton = ({ id, deleteEffect }) => {
+const DeleteButton = ({ person, deleteEffect }) => {
   return (<button onClick={() => {
     console.log(person);
     if (confirm(`delete ${person.name}?`)) {
@@ -12,18 +12,18 @@ const DeleteButton = ({ id, deleteEffect }) => {
   }}>delete</button>);
 }
 
-const NumbersDisplay = ({ numbers, deleteEffect }) => {
-  return numbers.map(number => {
-    return (<div key={number.id}>
-      {number.name} {number.number} {' '}
-      <DeleteButton id={number.id} deleteEffect={deleteEffect} />
+const PersonsDisplay = ({ persons, deleteEffect }) => {
+  return persons.map(person => {
+    return (<div key={person.id}>
+      {person.name} {person.number} {' '}
+      <DeleteButton person={person} deleteEffect={deleteEffect} />
     </div>
     );
   })
 }
 
-const Persons = ({ filter, numbers, deleteEffect }) => {
-  return (< NumbersDisplay numbers={numbers.filter((number) => number.name.includes(filter))} deleteEffect={deleteEffect} />);
+const Persons = ({ filter, persons, deleteEffect }) => {
+  return (< PersonsDisplay persons={persons.filter((person) => person.name.includes(filter))} deleteEffect={deleteEffect} />);
 }
 
 const Filter = ({ filter, setFilter }) => {
@@ -85,7 +85,7 @@ const App = () => {
       <h2>Add a new</h2>
       <PersonForm addName={addName} newName={newName} setNewName={setNewName} newNumber={newNumber} setNewNumber={setNewNumber} />
       <h2>Numbers</h2>
-      <Persons filter={filter} numbers={persons} deleteEffect={deleteEffect} />
+      <Persons filter={filter} persons={persons} deleteEffect={deleteEffect} />
     </div>
   )
 
