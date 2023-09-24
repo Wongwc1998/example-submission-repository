@@ -2,9 +2,17 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import personService from './services/persons'
 
+const DeleteButton = ({ id }) => {
+  return (<button onClick={() => console.log(id)}>delete</button>);
+}
+
 const NumbersDisplay = ({ numbers }) => {
   return numbers.map(number => {
-    return (<p key={number.id}>{number.name} {number.number}</p>);
+    return (<div key={number.id}>
+      {number.name} {number.number} {' '}
+      <DeleteButton id={number.id} />
+    </div>
+    );
   })
 }
 
