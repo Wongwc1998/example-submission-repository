@@ -27,10 +27,11 @@ const DeleteButton = ({ person, deleteEffect }) => {
       personService.deletePerson(person.id).then(() => {
         deleteEffect(person.id);
       })
-        .catch(() => {
-          setMessage(`Error deleting ${person.name}. The person might already be removed from the server.`);
-          setTimeout(() => setMessage(null), 5000);
+        .catch(error => {
+          setErrorMessage(error.response.data.error);  // <-- set error message
+          setTimeout(() => setErrorMessage(null), 5000);
         });
+
     }
   }}>delete</button>);
 }
@@ -76,16 +77,16 @@ const App = () => {
       .then(response => {
         setPersons(response.data)
       })
-      .catch(() => {
-        setMessage("Error fetching data from the server.");
-        setTimeout(() => setMessage(null), 5000);
+      .catch(error => {
+        setErrorMessage(error.response.data.error);  // <-- set error message
+        setTimeout(() => setErrorMessage(null), 5000);
       });
-
   }, []);
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [message, setMessage] = useState('')
+  const [errorMessage, setErrorMessage] = useState(null);
   const addName = (event) => {
     event.preventDefault();
     if (persons.some((element) => element.name === newName)) {
@@ -101,11 +102,10 @@ const App = () => {
             setMessage(`Updated ${updatedPerson.name}`);
             setTimeout(() => setMessage(null), 5000);
           })
-          .catch(() => {
-            setMessage(`Error updating ${newPerson.name}. The person might already be removed from the server.`);
-            setTimeout(() => setMessage(null), 5000);
+          .catch(error => {
+            setErrorMessage(error.response.data.error);  // <-- set error message
+            setTimeout(() => setErrorMessage(null), 5000);
           });
-
         setPersons(persons.map(person => person.id !== personID ? person : newPerson));
       }
     }
@@ -124,6 +124,10 @@ const App = () => {
             setMessage(null)
           }, 5000);
         })
+        .catch(error => {
+          setErrorMessage(error.response.data.error);  // <-- set error message
+          setTimeout(() => setErrorMessage(null), 5000);
+        });
     }
   }
   const deleteEffect = (id) => {
@@ -134,7 +138,8 @@ const App = () => {
   return (
     <div>
       <h1>Notes</h1>
-      {message === '' ? <div></div> : <Notification message={message} />}
+      {message && <Notification message={message} />}
+      {errorMessage && <ErrorNotification errorMessage={errorMessage} />}
       <h2>Phonebook</h2>
       <Filter filter={filter} setFilter={setFilter} />
       <h2>Add a new</h2>
