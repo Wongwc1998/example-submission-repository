@@ -2,8 +2,11 @@ import { useState, useEffect } from 'react'
 import axios from 'axios'
 import countriesService from './services/countries'
 
+const api_key = import.meta.env.VITE_API_KEY;
+
 const CountriesDisplay = ({ filter, countries, shownArray, setShownArray }) => {
   const [weather, setWeather] = useState(null);
+  console.log(api_key);
   const filteredCountries = countries.filter((country) => country.name.common.toLowerCase().includes(filter));
   useEffect(() => {
     if (filteredCountries.length === 1) {
