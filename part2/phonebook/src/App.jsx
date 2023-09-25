@@ -12,13 +12,25 @@ const Notification = ({ message }) => {
     </div>
   )
 }
+const ErrorNotification = ({ errorMessage }) => {
+  if (errorMessage === null) {
+    return null;
+  }
+  return <div className='error'>{errorMessage}</div>;
+}
+
 
 const DeleteButton = ({ person, deleteEffect }) => {
   return (<button onClick={() => {
     console.log(person);
     if (confirm(`delete ${person.name}?`)) {
-      personService.deletePerson(person.id);
-      deleteEffect(person.id);
+      personService.deletePerson(person.id).then(() => {
+        deleteEffect(person.id);
+      })
+        .catch(() => {
+          setMessage(`Error deleting ${person.name}. The person might already be removed from the server.`);
+          setTimeout(() => setMessage(null), 5000);
+        });
     }
   }}>delete</button>);
 }
@@ -64,6 +76,11 @@ const App = () => {
       .then(response => {
         setPersons(response.data)
       })
+      .catch(() => {
+        setMessage("Error fetching data from the server.");
+        setTimeout(() => setMessage(null), 5000);
+      });
+
   }, []);
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
@@ -78,9 +95,17 @@ const App = () => {
           name: newName, number: newNumber
         }
         const personID = persons.find(person => person.name === newName).id
-        personService.update(personID, newPerson).catch(() => {
-          setMessage(`Information of ${newPerson.name} has already been removed from server`);
-        })
+        personService.update(personID, newPerson)
+          .then(updatedPerson => {
+            setPersons(persons.map(person => person.id !== personID ? person : updatedPerson));
+            setMessage(`Updated ${updatedPerson.name}`);
+            setTimeout(() => setMessage(null), 5000);
+          })
+          .catch(() => {
+            setMessage(`Error updating ${newPerson.name}. The person might already be removed from the server.`);
+            setTimeout(() => setMessage(null), 5000);
+          });
+
         setPersons(persons.map(person => person.id !== personID ? person : newPerson));
       }
     }
